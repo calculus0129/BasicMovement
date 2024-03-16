@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
@@ -10,16 +11,37 @@ public class PlayerManager : MonoBehaviour
     public float moveMulti = 2;
     public bool isfront = true;
     public int maxjumpcnt = 2;
-    public int curJumpableCnt = 0;
+    public int curJumpableCnt = 0; // 봐야겠다 싶어서 public으로 함
     public Vector3 nowVel;
 
-    // public bool grounded = false; // 봐야겠다 싶어서 public으로 함
+    enum KeyTypes
+    {
+        DOWN, KEY, UP
+    }
+
+    // public bool grounded = false;
+
+    readonly bool[][] keys = new bool[4][];
+    void getKeys()
+    {
+        keys[0][(int)KeyTypes.DOWN] = Input.GetKeyDown(KeyCode.RightArrow);
+        keys[0][(int)KeyTypes.KEY] = Input.GetKey(KeyCode.RightArrow);
+        keys[0][(int)KeyTypes.UP] = Input.GetKeyUp(KeyCode.RightArrow);
+        keys[1][(int)KeyTypes.DOWN] = Input.GetKeyDown(KeyCode.LeftArrow);
+        keys[1][(int)KeyTypes.KEY] = Input.GetKey(KeyCode.LeftArrow);
+        keys[1][(int)KeyTypes.UP] = Input.GetKeyUp(KeyCode.LeftArrow);
+        keys[2][(int)KeyTypes.DOWN] = Input.GetKeyDown(KeyCode.UpArrow);
+        keys[2][(int)KeyTypes.KEY] = Input.GetKey(KeyCode.UpArrow);
+        keys[2][(int)KeyTypes.UP] = Input.GetKeyUp(KeyCode.UpArrow);
+        keys[3][(int)KeyTypes.DOWN] = Input.GetKeyDown(KeyCode.DownArrow);
+        keys[3][(int)KeyTypes.KEY] = Input.GetKey(KeyCode.DownArrow);
+        keys[3][(int)KeyTypes.UP] = Input.GetKeyUp(KeyCode.DownArrow);
+    }
 
     // Start is called before the first frame update
-    // By Drag and Drop
     void Start()
     {
-        curJumpableCnt = 1;
+        for(int i=0,e=keys.Count();i<e;++i) keys[i] = new bool[3];
     }
 
     // Update is called once per frame // => 성능에 따라 다르게 간격으로 불러짐.
@@ -29,15 +51,18 @@ public class PlayerManager : MonoBehaviour
         // Key: 키를 누르는 도중에 작동
         // KeyUp: 키를 뗄 때 한 번만
         nowVel = player.GetComponent<Rigidbody>().velocity;
+        getKeys();
         Jump();
         Move();
+        // https://en.wikipedia.org/wiki/Quaternions_and_spatial_rotation
+        player.transform.rotation = isfront ? new Quaternion(1, 0, 0, 0) : new Quaternion(0, 0, 1, 0);
         player.GetComponent<Rigidbody>().velocity = nowVel;
-
     }
 
     void Jump()
     {
-        if(Input.GetKeyDown(KeyCode.C) && curJumpableCnt>0) {
+        if (Input.GetKeyDown(KeyCode.C) && curJumpableCnt > 0)
+        {
             --curJumpableCnt;
             nowVel.y = jumpMulti;
             // Vector3.up: (0, 1, 0)
@@ -46,42 +71,51 @@ public class PlayerManager : MonoBehaviour
 
     void Move()
     {
-        if (Input.GetKey(KeyCode.UpArrow))
-        {
-            nowVel.z = moveMulti;
-        }
-        if (Input.GetKey(KeyCode.DownArrow))
-        {
-            nowVel.z = -moveMulti;
-        }
-        if (Input.GetKeyDown(KeyCode.LeftArrow) && isfront && !Input.GetKeyDown(KeyCode.RightArrow))
-        {
-            isfront = false;
-            player.transform.Rotate(new Vector3(0, 180, 0));
-            
-        }
-        else if (Input.GetKeyDown(KeyCode.RightArrow) && !isfront && !Input.GetKeyDown(KeyCode.LeftArrow))
+        if (keys[0][(int)KeyTypes.DOWN] || (keys[1][(int)KeyTypes.UP] && keys[0][(int)KeyTypes.KEY]))
         {
             isfront = true;
-            player.transform.Rotate(new Vector3(0, 180, 0));
+            // nowVel.x = moveMulti;
         }
-        if (Input.GetKey(KeyCode.LeftArrow))
+        if (keys[1][(int)KeyTypes.DOWN] || (keys[0][(int)KeyTypes.UP] && keys[1][(int)KeyTypes.KEY]))
         {
-            nowVel.x = -moveMulti;
+            isfront = false;
+            // nowVel.x = -moveMulti;
         }
-        if (Input.GetKey(KeyCode.RightArrow))
-        {
-            nowVel.x = moveMulti;
+        // if (isfront && keys[0][(int)KeyTypes.KEY]) nowVel.x = moveMulti;
+        // if (!isfront && keys[1][(int)KeyTypes.KEY]) nowVel.x = -moveMulti;
+
+        setVel(keys[0], keys[1], moveMulti, 0);
+        setVel(keys[2], keys[3], moveMulti, 2);
+    }
+
+    void setVel(bool[] plus, bool[] minus, float multi, int axis) {
+        int status=0;
+        if(plus[(int)KeyTypes.DOWN] || (!minus[(int)KeyTypes.KEY] && plus[(int)KeyTypes.KEY])) {
+            status = 1;
+        }
+        if(minus[(int)KeyTypes.DOWN] || (!plus[(int)KeyTypes.KEY] && minus[(int)KeyTypes.KEY])) {
+            status = -1;
+        }
+        if(status!=0) switch(axis) {
+            case 0:
+                nowVel.x = status*multi;
+                break;
+            case 1:
+                nowVel.y = status*multi;
+                break;
+            case 2:
+                nowVel.z = status*multi;
+                break;
         }
     }
 
-    // 딱 collide할때 스 순간만
+    // 딱 collide할때 그 순간만
     public void OnCollisionEnter(Collision collision)
     {
-        if(collision.gameObject.CompareTag("ground")) {
+        if (collision.gameObject.CompareTag("ground"))
+        {
             curJumpableCnt = maxjumpcnt;
         }
-        // curJumpableCnt = maxjumpcnt;
     }
 
     // collide되고있는 순간
