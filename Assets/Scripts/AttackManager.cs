@@ -41,6 +41,7 @@ public class AttackManager : MonoBehaviour
             bullets[bulletIndex].transform.position = this.transform.position;
             bullets[bulletIndex].SetActive(true);
             bullets[bulletIndex].GetComponent<Rigidbody>().velocity = Vector3.right * bulletSpeed * (player.GetComponent<PlayerManager>().isfront ? 1 : -1);//transform.parent.transform.localScale.x;
+            ++bulletIndex;
         }
         else {
             noBulletEffect();

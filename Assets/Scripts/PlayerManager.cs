@@ -9,7 +9,7 @@ public class PlayerManager : MonoBehaviour
     public GameObject player; // gunpivot => 그걸 돌려줄 수도 있다! 아니면 scale을 (-1,1,1)로!
     public float jumpMulti = 10;
     public float moveMulti = 2;
-    public bool isfront = true;
+    public bool isfront;
     public int maxjumpcnt = 2;
     public int curJumpableCnt = 0; // 봐야겠다 싶어서 public으로 함
     public Vector3 nowVel;
@@ -41,6 +41,7 @@ public class PlayerManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        isfront = true;
         for(int i=0,e=keys.Count();i<e;++i) keys[i] = new bool[3];
     }
 
@@ -55,7 +56,10 @@ public class PlayerManager : MonoBehaviour
         Jump();
         Move();
         // https://en.wikipedia.org/wiki/Quaternions_and_spatial_rotation
-        player.transform.rotation = isfront ? new Quaternion(1, 0, 0, 0) : new Quaternion(0, 0, 1, 0);
+        // isfront ? new Quaternion(1, 0, 0, 0) : new Quaternion(0, 0, 1, 0);
+        
+        // https://docs.unity3d.com/kr/2022.3/Manual/class-Quaternion.html
+        player.transform.rotation = isfront ? Quaternion.Euler(0, 0, 0) : Quaternion.Euler(0, 180, 0);
         player.GetComponent<Rigidbody>().velocity = nowVel;
     }
 
