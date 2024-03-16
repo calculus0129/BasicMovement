@@ -871,6 +871,11 @@ MonoBehaviour:
   player: {fileID: 1232448450}
   fireSound: {fileID: 8300000, guid: bfd9019c0105944a89345137e8add837, type: 3}
   dryFireSound: {fileID: 8300000, guid: a1f603bff5faf430890c66c05e752c38, type: 3}
+  reloadSound: {fileID: 8300000, guid: d993caac274424a2d8ca3a8e7343f9d3, type: 3}
+  shellHitSounds:
+  - {fileID: 8300000, guid: 89038a5c4d8974eaab6376d318d1e098, type: 3}
+  - {fileID: 8300000, guid: ce7f028901d76416684a9771f436afc5, type: 3}
+  - {fileID: 8300000, guid: 8b3daa48192f9422a9f0de2d65b7861f, type: 3}
   bulletSpeed: 40
   bulletCount: 6
   bulletIndex: 0
@@ -1087,6 +1092,11 @@ MonoBehaviour:
   player: {fileID: 1232448450}
   fireSound: {fileID: 8300000, guid: bfd9019c0105944a89345137e8add837, type: 3}
   dryFireSound: {fileID: 8300000, guid: a1f603bff5faf430890c66c05e752c38, type: 3}
+  reloadSound: {fileID: 8300000, guid: d993caac274424a2d8ca3a8e7343f9d3, type: 3}
+  shellHitSounds:
+  - {fileID: 8300000, guid: 89038a5c4d8974eaab6376d318d1e098, type: 3}
+  - {fileID: 8300000, guid: ce7f028901d76416684a9771f436afc5, type: 3}
+  - {fileID: 8300000, guid: 8b3daa48192f9422a9f0de2d65b7861f, type: 3}
   bulletSpeed: 40
   bulletCount: 6
   bulletIndex: 0
