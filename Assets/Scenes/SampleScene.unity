@@ -879,9 +879,13 @@ MonoBehaviour:
   bulletSpeed: 40
   reloadTime: 3
   bulletCount: 24
+  isAuto: 1
+  autoInterval: 0.125
   bulletIndex: 0
   bullets: []
   audio: {fileID: 0}
+  hasAmmo: 1
+  isReloading: 0
 --- !u!82 &1402158563
 AudioSource:
   m_ObjectHideFlags: 0
@@ -907,7 +911,7 @@ AudioSource:
   Pan2D: 0
   rolloffMode: 0
   BypassEffects: 0
-  BypassListenerEffects: 0
+  BypassListenerEffects: 1
   BypassReverbZones: 0
   rolloffCustomCurve:
     serializedVersion: 2
@@ -1101,9 +1105,13 @@ MonoBehaviour:
   bulletSpeed: 40
   reloadTime: 3
   bulletCount: 24
+  isAuto: 1
+  autoInterval: 0.125
   bulletIndex: 0
   bullets: []
   audio: {fileID: 0}
+  hasAmmo: 1
+  isReloading: 0
 --- !u!82 &2015293309
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1129,7 +1137,7 @@ AudioSource:
   Pan2D: 0
   rolloffMode: 0
   BypassEffects: 0
-  BypassListenerEffects: 0
+  BypassListenerEffects: 1
   BypassReverbZones: 0
   rolloffCustomCurve:
     serializedVersion: 2

@@ -12,6 +12,8 @@ public class AttackManager : MonoBehaviour
     public float bulletSpeed = 40;
     public float reloadTime = 1;
     public int bulletCount = 6;
+    public bool isAuto = true;
+    public float autoInterval=0.125f;
 
 
     public int bulletIndex;
@@ -19,7 +21,7 @@ public class AttackManager : MonoBehaviour
     public AudioSource audio;
 
     public bool hasAmmo=true, isReloading=false;
-    float reloadTimer;
+    float reloadTimer, autoTimer;
 
     // Start is called before the first frame update
     void Start()
@@ -37,10 +39,12 @@ public class AttackManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(isAuto) autoTimer += Time.deltaTime;
         if(isReloading) reloadTimer += Time.deltaTime;
         // object pulling: creation and destruction 횟수를 최소로 할 수 있다.
-        if (Input.GetKeyDown(KeyCode.X))
+        if (Input.GetKeyDown(KeyCode.X) || isAuto && autoTimer>autoInterval && Input.GetKey(KeyCode.X))
         {
+            autoTimer=0f;
             if(hasAmmo) normalAttack();
             else {
                 noBulletEffect();
@@ -64,6 +68,7 @@ public class AttackManager : MonoBehaviour
     {
         bullet.transform.position = this.transform.position;
         bullet.GetComponent<Rigidbody>().velocity = Vector3.right * bulletSpeed * (player.GetComponent<PlayerManager>().isfront ? 1 : -1);
+        audio.Stop();
         audio.PlayOneShot(fireSound);
         bullet.SetActive(true);
         if(shellHitSounds.Length>0) audio.PlayOneShot(shellHitSounds[Random.Range(0, shellHitSounds.Length)]);
@@ -84,7 +89,7 @@ public class AttackManager : MonoBehaviour
 
     void reloadComplete() {
         // audio.loop=false;
-        audio.Stop();
+        // audio.Stop();
         reloadTimer=0;
         bulletIndex=0;
         hasAmmo=true;
