@@ -18,7 +18,7 @@ public class AttackManager : MonoBehaviour
     public List<GameObject> bullets;
     public AudioSource audio;
 
-    bool hasAmmo=true, isReloading=false;
+    public bool hasAmmo=true, isReloading=false;
     float reloadTimer;
 
     // Start is called before the first frame update
@@ -45,11 +45,11 @@ public class AttackManager : MonoBehaviour
             else {
                 noBulletEffect();
                 if(!isReloading) reload();
-                if(reloadTimer>=reloadTime) {
-                    reloadComplete();
-                }
             }
             // Instantiate(bullet, this.transform.position, Quaternion.identity);
+        }
+        if(reloadTimer>=reloadTime) {
+            reloadComplete();
         }
     }
 
@@ -84,6 +84,7 @@ public class AttackManager : MonoBehaviour
 
     void reloadComplete() {
         // audio.loop=false;
+        audio.Stop();
         reloadTimer=0;
         bulletIndex=0;
         hasAmmo=true;

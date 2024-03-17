@@ -877,7 +877,8 @@ MonoBehaviour:
   - {fileID: 8300000, guid: ce7f028901d76416684a9771f436afc5, type: 3}
   - {fileID: 8300000, guid: 8b3daa48192f9422a9f0de2d65b7861f, type: 3}
   bulletSpeed: 40
-  bulletCount: 6
+  reloadTime: 3
+  bulletCount: 24
   bulletIndex: 0
   bullets: []
   audio: {fileID: 0}
@@ -1098,7 +1099,8 @@ MonoBehaviour:
   - {fileID: 8300000, guid: ce7f028901d76416684a9771f436afc5, type: 3}
   - {fileID: 8300000, guid: 8b3daa48192f9422a9f0de2d65b7861f, type: 3}
   bulletSpeed: 40
-  bulletCount: 6
+  reloadTime: 3
+  bulletCount: 24
   bulletIndex: 0
   bullets: []
   audio: {fileID: 0}
