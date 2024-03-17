@@ -59,6 +59,7 @@ public class AttackManager : MonoBehaviour
 
     void normalAttack()
     {
+        // audio.clip=fireSound;
         fire(bullets[bulletIndex]);
         ++bulletIndex;
         hasAmmo = bulletIndex < bullets.Count; // List.Count; List의 길이

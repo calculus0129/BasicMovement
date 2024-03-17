@@ -880,7 +880,7 @@ MonoBehaviour:
   reloadTime: 3
   bulletCount: 24
   isAuto: 1
-  autoInterval: 0.125
+  autoInterval: 0.09375
   bulletIndex: 0
   bullets: []
   audio: {fileID: 0}
@@ -1106,7 +1106,7 @@ MonoBehaviour:
   reloadTime: 3
   bulletCount: 24
   isAuto: 1
-  autoInterval: 0.125
+  autoInterval: 0.09375
   bulletIndex: 0
   bullets: []
   audio: {fileID: 0}
