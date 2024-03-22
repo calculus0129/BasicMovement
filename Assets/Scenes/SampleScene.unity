@@ -1044,7 +1044,7 @@ MonoBehaviour:
   bulletSpeed: 40
   reloadInterval: 3
   bulletCount: 24
-  maxMag: 12
+  maxMag: 6
   vortexInterval: 0.125
   bulletIndex: 0
   bullets: []
@@ -1664,7 +1664,7 @@ MonoBehaviour:
   bulletSpeed: 40
   reloadInterval: 3
   bulletCount: 24
-  maxMag: 12
+  maxMag: 6
   vortexInterval: 0.125
   bulletIndex: 0
   bullets: []

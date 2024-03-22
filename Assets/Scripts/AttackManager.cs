@@ -5,7 +5,8 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 [System.Serializable] // ?
-public enum gunState {
+public enum gunState
+{
     IDLE,   // just in case
     READY,  // firable
     IS_VORTEXING, // vortexing after fire
@@ -32,7 +33,7 @@ public class AttackManager : MonoBehaviour
     public int maxMag = 6;
 
     // public bool isAuto = false;
-    public float vortexInterval=0.125f;
+    public float vortexInterval = 0.125f;
 
 
     public int bulletIndex;
@@ -57,42 +58,46 @@ public class AttackManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(gunstate == gunState.IS_RELOADING) {
-            reloadTimer += Time.deltaTime;
-            if(reloadTimer>=reloadInterval) {
-                reloadComplete();
-                reloadTimer = 0f;
-                gunstate = gunState.READY;
-            }
+        switch (gunstate)
+        {
+            case gunState.IS_VORTEXING:
+                vortexTimer += Time.deltaTime;
+                if (vortexTimer >= vortexInterval)
+                {
+                    gunstate = gunState.READY;
+                }
+                break;
+            case gunState.IS_RELOADING:
+                reloadTimer += Time.deltaTime;
+                if (reloadTimer >= reloadInterval)
+                {
+                    reloadComplete();
+                    reloadTimer = 0f;
+                    gunstate = gunState.READY;
+                }
+                break;
         }
         // object pulling: creation and destruction 횟수를 최소로 할 수 있다.
         if (Input.GetKey(KeyCode.X))
         {
-            switch(gunstate) {
-                // case gunState.IDLE:
-                //     break;
+            switch (gunstate)
+            {
                 case gunState.READY:
                     normalAttack();
                     vortexTimer = 0f;
                     gunstate = gunState.IS_VORTEXING;
-                    if(bulletIndex >= maxMag) { // bullets.Count List.Count; List의 길이
+                    if (bulletIndex >= maxMag)
+                    { // bullets.Count List.Count; List의 길이
                         reload();
                         gunstate = gunState.IS_RELOADING;
-                    }
-                    break;
-                case gunState.IS_VORTEXING:
-                    vortexTimer += Time.deltaTime;
-                    if(vortexTimer >= vortexInterval) {
-                        gunstate = gunState.READY;
                     }
                     break;
                 // case gunState.IS_RELOADING:
                 //     noBulletEffect();
                 //     break;
             }
-            // Instantiate(bullet, this.transform.position, Quaternion.identity);
         }
-        if (gunstate == gunState.IS_RELOADING && Input.GetKeyDown(KeyCode.X)) noBulletEffect();
+        if (Input.GetKeyDown(KeyCode.X) && gunstate == gunState.IS_RELOADING) noBulletEffect();
     }
 
     void normalAttack()
@@ -109,7 +114,7 @@ public class AttackManager : MonoBehaviour
         audio.Stop();
         audio.PlayOneShot(fireSound);
         bullet.SetActive(true);
-        if(shellHitSounds.Length>0) audio.PlayOneShot(shellHitSounds[Random.Range(0, shellHitSounds.Length)]);
+        if (shellHitSounds.Length > 0) audio.PlayOneShot(shellHitSounds[Random.Range(0, shellHitSounds.Length)]);
         //transform.parent.transform.localScale.x;
     }
 
@@ -118,15 +123,17 @@ public class AttackManager : MonoBehaviour
         audio.PlayOneShot(dryFireSound);
     }
 
-    void reload() {
+    void reload()
+    {
         audio.clip = reloadSound;
         // audio.loop=true;
         audio.Play();
     }
 
-    void reloadComplete() {
+    void reloadComplete()
+    {
         // audio.loop=false;
         // audio.Stop();
-        bulletIndex=0;
+        bulletIndex = 0;
     }
 }
