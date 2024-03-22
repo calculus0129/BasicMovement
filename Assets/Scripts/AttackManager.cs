@@ -12,7 +12,7 @@ public class AttackManager : MonoBehaviour
     public float bulletSpeed = 40;
     public float reloadTime = 1;
     public int bulletCount = 6;
-    public bool isAuto = true;
+    public bool isAuto = false;
     public float autoInterval=0.125f;
 
 
