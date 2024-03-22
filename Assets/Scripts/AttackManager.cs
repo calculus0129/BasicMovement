@@ -38,7 +38,7 @@ public class AttackManager : MonoBehaviour
     public int bulletIndex;
     public List<GameObject> bullets;
     public AudioSource audio;
-    float reloadTimer, vortexTimer;
+    public float reloadTimer, vortexTimer;
 
     // Start is called before the first frame update
     void Start()
