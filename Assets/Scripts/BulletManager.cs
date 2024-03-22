@@ -22,4 +22,10 @@ public class GunManager : MonoBehaviour
             timer = 0f;
         }
     }
+
+    private void OnTriggerEnter(Collider other) {
+        if(!other.gameObject.CompareTag("player")) {
+            gameObject.SetActive(false);
+        }
+    }
 }
