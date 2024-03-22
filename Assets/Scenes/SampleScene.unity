@@ -760,6 +760,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dbff2f2c385a44dea2c85817e80a281, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fps: 0
+  gunstate: 0
   bullet: {fileID: 1565150892573917458, guid: ee919ea1e770b4ea1b7395617bc04505, type: 3}
   bulletPool: {fileID: 1275579697}
   player: {fileID: 1232448450}
@@ -774,15 +776,13 @@ MonoBehaviour:
   - {fileID: 8300000, guid: a66079432c288466394d0e1c85c9acd1, type: 3}
   - {fileID: 8300000, guid: cf16599536ece4a2dadc6682c5c47f4e, type: 3}
   bulletSpeed: 40
-  reloadTime: 3
-  bulletCount: 6
-  isAuto: 0
-  autoInterval: 0.09375
+  reloadInterval: 3
+  bulletCount: 24
+  maxMag: 12
+  vortexInterval: 0.125
   bulletIndex: 0
   bullets: []
   audio: {fileID: 0}
-  hasAmmo: 1
-  isReloading: 0
 --- !u!82 &1402158563
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1094,6 +1094,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dbff2f2c385a44dea2c85817e80a281, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fps: 0
+  gunstate: 0
   bullet: {fileID: 1565150892573917458, guid: ee919ea1e770b4ea1b7395617bc04505, type: 3}
   bulletPool: {fileID: 1275579697}
   player: {fileID: 1232448450}
@@ -1108,15 +1110,13 @@ MonoBehaviour:
   - {fileID: 8300000, guid: a66079432c288466394d0e1c85c9acd1, type: 3}
   - {fileID: 8300000, guid: cf16599536ece4a2dadc6682c5c47f4e, type: 3}
   bulletSpeed: 40
-  reloadTime: 3
-  bulletCount: 6
-  isAuto: 0
-  autoInterval: 0.09375
+  reloadInterval: 3
+  bulletCount: 24
+  maxMag: 12
+  vortexInterval: 0.125
   bulletIndex: 0
   bullets: []
   audio: {fileID: 0}
-  hasAmmo: 1
-  isReloading: 0
 --- !u!82 &2015293309
 AudioSource:
   m_ObjectHideFlags: 0

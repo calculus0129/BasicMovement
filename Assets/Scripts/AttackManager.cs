@@ -4,28 +4,46 @@ using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 
+[System.Serializable] // ?
+public enum gunState {
+    IDLE,   // just in case
+    READY,  // firable
+    IS_VORTEXING, // vortexing after fire
+    IS_RELOADING, // reloading
+};
+
 public class AttackManager : MonoBehaviour
 {
+    [Header("Ingame")] // 'Header'. visualize nyum. // in-play editing
+    public float fps;
+
+    [Header("Outgame")]
+
+    public gunState gunstate;
     public GameObject bullet, bulletPool, player; // bulletPool을 구별!
     public AudioClip fireSound, dryFireSound, reloadSound;
     public AudioClip[] shellHitSounds;
     public float bulletSpeed = 40;
-    public float reloadTime = 1;
-    public int bulletCount = 6;
-    public bool isAuto = false;
-    public float autoInterval=0.125f;
+    public float reloadInterval = 1f;
+
+    // bulletCount is the maximum value of the maxMag.
+    // maxMag is the maximum number of the firable bullets in this reloaded phase.
+    public int bulletCount = 24;
+    public int maxMag = 6;
+
+    // public bool isAuto = false;
+    public float vortexInterval=0.125f;
 
 
     public int bulletIndex;
     public List<GameObject> bullets;
     public AudioSource audio;
-
-    public bool hasAmmo=true, isReloading=false;
-    float reloadTimer, autoTimer;
+    float reloadTimer, vortexTimer;
 
     // Start is called before the first frame update
     void Start()
     {
+        gunstate = gunState.READY;
         bulletIndex = 0;
         bullets = new List<GameObject>();
         audio = GetComponent<AudioSource>();
@@ -39,22 +57,42 @@ public class AttackManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(isAuto) autoTimer += Time.deltaTime;
-        if(isReloading) reloadTimer += Time.deltaTime;
+        if(gunstate == gunState.IS_RELOADING) {
+            reloadTimer += Time.deltaTime;
+            if(reloadTimer>=reloadInterval) {
+                reloadComplete();
+                reloadTimer = 0f;
+                gunstate = gunState.READY;
+            }
+        }
         // object pulling: creation and destruction 횟수를 최소로 할 수 있다.
-        if (Input.GetKeyDown(KeyCode.X) || isAuto && autoTimer>autoInterval && Input.GetKey(KeyCode.X))
+        if (Input.GetKey(KeyCode.X))
         {
-            autoTimer=0f;
-            if(hasAmmo) normalAttack();
-            else {
-                noBulletEffect();
-                if(!isReloading) reload();
+            switch(gunstate) {
+                // case gunState.IDLE:
+                //     break;
+                case gunState.READY:
+                    normalAttack();
+                    vortexTimer = 0f;
+                    gunstate = gunState.IS_VORTEXING;
+                    if(bulletIndex >= maxMag) { // bullets.Count List.Count; List의 길이
+                        reload();
+                        gunstate = gunState.IS_RELOADING;
+                    }
+                    break;
+                case gunState.IS_VORTEXING:
+                    vortexTimer += Time.deltaTime;
+                    if(vortexTimer >= vortexInterval) {
+                        gunstate = gunState.READY;
+                    }
+                    break;
+                // case gunState.IS_RELOADING:
+                //     noBulletEffect();
+                //     break;
             }
             // Instantiate(bullet, this.transform.position, Quaternion.identity);
         }
-        if(reloadTimer>=reloadTime) {
-            reloadComplete();
-        }
+        if (gunstate == gunState.IS_RELOADING && Input.GetKeyDown(KeyCode.X)) noBulletEffect();
     }
 
     void normalAttack()
@@ -62,7 +100,6 @@ public class AttackManager : MonoBehaviour
         // audio.clip=fireSound;
         fire(bullets[bulletIndex]);
         ++bulletIndex;
-        hasAmmo = bulletIndex < bullets.Count; // List.Count; List의 길이
     }
 
     void fire(GameObject bullet)
@@ -82,7 +119,6 @@ public class AttackManager : MonoBehaviour
     }
 
     void reload() {
-        isReloading=true;
         audio.clip = reloadSound;
         // audio.loop=true;
         audio.Play();
@@ -91,9 +127,6 @@ public class AttackManager : MonoBehaviour
     void reloadComplete() {
         // audio.loop=false;
         // audio.Stop();
-        reloadTimer=0;
         bulletIndex=0;
-        hasAmmo=true;
-        isReloading=false;
     }
 }
