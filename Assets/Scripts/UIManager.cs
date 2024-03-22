@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
@@ -13,8 +14,9 @@ public class UIManager : MonoBehaviour
     public Image vortexSlider;
     public GameObject rgun;
     public GameObject lgun;
+    public Toggle isAutoToggle; // later change the codes to manage multiple weapons.
 
-    private AttackManager rgunAtkScript;
+    private AttackManager rgunAtkScript, lgunAtkScript;
     private int maxMag;
     private int bulletIndex;
 
@@ -22,12 +24,14 @@ public class UIManager : MonoBehaviour
     {
         magText.text = "YEE";
         rgunAtkScript = rgun.GetComponent<AttackManager>();
+        lgunAtkScript = lgun.GetComponent<AttackManager>();
         maxMag = bulletIndex = rgunAtkScript.maxMag;
     }
 
     // Update is called once per frame
     void Update()
     {
+        rgunAtkScript.isAuto = lgunAtkScript.isAuto = isAutoToggle.isOn;
         maxMag = rgunAtkScript.maxMag;
         bulletIndex = rgunAtkScript.bulletIndex;
         // reloadSlider.fillAmount = 
@@ -40,11 +44,11 @@ public class UIManager : MonoBehaviour
         {
             case gunState.READY:
             case gunState.IS_VORTEXING:
-                vortexSlider.fillAmount = rgunAtkScript.gunstate == gunState.READY ? 1 : rgunAtkScript.vortexTimer/rgunAtkScript.vortexInterval;
+                vortexSlider.fillAmount = rgunAtkScript.gunstate == gunState.READY || rgunAtkScript.vortexInterval == 0f ? 1 : rgunAtkScript.vortexTimer/rgunAtkScript.vortexInterval;
                 reloadSlider.fillAmount = (float)(maxMag - bulletIndex) / maxMag;
                 break;
             case gunState.IS_RELOADING:
-                reloadSlider.fillAmount = rgunAtkScript.reloadTimer / rgunAtkScript.reloadInterval;
+                reloadSlider.fillAmount = rgunAtkScript.reloadInterval == 0f ? 1 : rgunAtkScript.reloadTimer / rgunAtkScript.reloadInterval;
                 break;
         }
     }

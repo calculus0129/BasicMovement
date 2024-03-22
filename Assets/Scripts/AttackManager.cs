@@ -32,7 +32,7 @@ public class AttackManager : MonoBehaviour
     public int bulletCount = 24;
     public int maxMag = 6;
 
-    // public bool isAuto = false;
+    public bool isAuto = false;
     public float vortexInterval = 0.125f;
 
 
@@ -78,7 +78,7 @@ public class AttackManager : MonoBehaviour
                 break;
         }
         // object pulling: creation and destruction 횟수를 최소로 할 수 있다.
-        if (Input.GetKey(KeyCode.X))
+        if (isAuto && Input.GetKey(KeyCode.X) || !isAuto && Input.GetKeyDown(KeyCode.X))
         {
             switch (gunstate)
             {
